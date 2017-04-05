@@ -5,6 +5,8 @@ services:
       context: ./
       dockerfile: Dockerfile.dev
     command: npm run start
+    depends_on:
+      - mongo
     # Export local file into conatiner `/app/node_monolithic`
     # With only one path create another layer to manage the node_modules
     # Rule => Export Working File => Export Dependencies
@@ -14,3 +16,14 @@ services:
     # Map Local port to docker expose port
     ports:
       - 4030:6030
+  mongo:
+    image: daocloud.io/library/mongo:3.4
+    volumes_from:
+      - mongodata
+    ports:
+      - 27027:27017
+  mongodata:
+    image: daocloud.io/library/mongo:3.4
+    volumes:
+      - /data/db
+    command: --break-mongo
