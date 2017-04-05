@@ -1,0 +1,16 @@
+version: '2'
+services:
+  web:
+    build:
+      context: ./
+      dockerfile: Dockerfile.dev
+    command: npm run start
+    # Export local file into conatiner `/app/node_monolithic`
+    # With only one path create another layer to manage the node_modules
+    # Rule => Export Working File => Export Dependencies
+    volumes:
+      - .:/app/node_monolithic
+      - /app/node_monolithic/node_modules
+    # Map Local port to docker expose port
+    ports:
+      - 4030:6030

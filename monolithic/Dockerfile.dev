@@ -1,0 +1,14 @@
+# Use node 7.7.3-slim as base image
+FROM daocloud.io/library/node:7.7.3-slim
+
+# Expose the port to the container
+EXPOSE 6030
+# Set the working directory for `RUN`,  `CMD`, `ENTRYPOINT`, `COPY`, `ADD`
+WORKDIR /app
+WORKDIR node_monolithic
+ENV NODE_ENV development
+
+# Add `package.json` and `npm i` before add other files
+# This make a new layer, this layer changed only when package.json changed.
+ADD package.json /app/node_monolithic
+RUN npm install
